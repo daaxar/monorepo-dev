@@ -26,7 +26,7 @@
     "test": "npm run --silent test --workspaces --if-present",
     "nvm": "nvm use",
     "prepare": "if [ \"$NODE_ENV\" != 'production' ]; then husky; fi",
-    "Dx": "Dx"
+    "Dx": "npm exec --workspace=tools/cli -- Dx"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

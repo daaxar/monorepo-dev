@@ -1,0 +1,50 @@
+# Configuración Docker para funciones Lambda
+# filepath: funcs/docker-compose.yml
+
+services:
+  lambda:
+    build:
+      context: ..
+      dockerfile: funcs/Dockerfile
+      args:
+        - LAMBDA_NAME=${LAMBDA_NAME:-example}
+        - LAMBDA_PATH=${LAMBDA_PATH:-example/func-a}
+    container_name: daaxar-lambda-${LAMBDA_NAME:-example}
+    ports:
+      # El puerto 9000 es el estándar para las funciones Lambda locales
+      - "${PORT:-9000}:8080"
+    environment:
+      # Variables de entorno comunes para Lambda
+      - AWS_LAMBDA_NAME_TIMEOUT=30
+      - AWS_LAMBDA_NAME_MEMORY_SIZE=256
+      - NODE_ENV=development
+      - NODE_PATH=/var/runtime/node_modules:/opt/nodejs/node_modules:/opt/nodejs:/var/task
+    # volumes:
+    #   # Montar los directorios para desarrollo
+    #   - ../libs/middlewares/dist:/opt/nodejs/libs/middlewares/dist
+    # # El comando debe ser el nombre del handler (sin la extensión)
+    # command: "index.handler"
+
+  lambda-dev:
+    build:
+      context: ..
+      dockerfile: funcs/Dockerfile
+      args:
+        - LAMBDA_NAME=${LAMBDA_NAME:-example}
+        - LAMBDA_PATH=${LAMBDA_PATH:-example/func-a}
+    container_name: daaxar-lambda-dev-${LAMBDA_NAME:-example}
+    ports:
+      - "${PORT_DEV:-9001}:8080"
+      - "${DEBUG_PORT:-9229}:9229"
+    environment:
+      - AWS_LAMBDA_NAME_TIMEOUT=900
+      - AWS_LAMBDA_NAME_MEMORY_SIZE=1024
+      - NODE_ENV=development
+      - NODE_OPTIONS=--inspect=0.0.0.0:9229
+      - NODE_PATH=/var/runtime/node_modules:/opt/nodejs/node_modules:/opt/nodejs:/var/task
+    volumes:
+      - ../funcs/${LAMBDA_PATH:-example}/src:/var/task/src
+      - ../funcs/${LAMBDA_PATH:-example}/dist:/var/task
+    #   - ../libs/middlewares/src:/opt/nodejs/libs/middlewares/src
+    #   - ../libs/middlewares/dist:/opt/nodejs/libs/middlewares/dist
+    # command: "index.handler"

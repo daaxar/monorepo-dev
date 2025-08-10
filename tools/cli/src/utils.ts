@@ -21,6 +21,7 @@ export function findMonorepoRoot(): string {
 }
 
 export function detectProject(monorepoRoot: string | null): string | null {
+  if (!monorepoRoot) return null;
   let currentDir = process.cwd();
   while (currentDir !== monorepoRoot) {
     if (fs.existsSync(path.join(currentDir, "package.json"))) {
@@ -28,7 +29,6 @@ export function detectProject(monorepoRoot: string | null): string | null {
     }
     currentDir = path.dirname(currentDir);
   }
-
   return null;
 }
 
@@ -49,18 +49,52 @@ export function listProjects(): string[] {
 
   const projects: string[] = [];
 
-  packageJson.workspaces.forEach((pattern: string) => {
-    const workspacePath = path.join(monorepoRoot, pattern.replace("/*", ""));
-    if (fs.existsSync(workspacePath)) {
-      const subdirs = fs.readdirSync(workspacePath);
-      subdirs.forEach((subdir: string) => {
-        const projectPath = path.join(workspacePath, subdir);
-        if (fs.existsSync(path.join(projectPath, "package.json"))) {
-          projects.push(path.relative(monorepoRoot, projectPath)); // Store relative path
-        }
-      });
+  const maxDepth = 3;
+  const hasPackageJson = (p: string) =>
+    fs.existsSync(path.join(p, "package.json"));
+
+  function walk(dir: string, depth: number) {
+    if (depth > maxDepth) return;
+    if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory()) return;
+    const isPkg = hasPackageJson(dir);
+    if (isPkg && depth > 0) {
+      projects.push(path.relative(monorepoRoot, dir));
     }
+    // Continuar para descubrir paquetes anidados (excepto node_modules)
+    const entries = fs.readdirSync(dir);
+    for (const e of entries) {
+      if (e.startsWith(".") || e === "node_modules" || e === "dist") continue;
+      walk(path.join(dir, e), depth + 1);
+    }
+  }
+
+  packageJson.workspaces.forEach((pattern: string) => {
+    const base = pattern.replace(/\/\*.*$/, "");
+    const workspacePath = path.join(monorepoRoot, base);
+    walk(workspacePath, 0);
   });
 
-  return projects;
+  return Array.from(new Set(projects)).sort();
+}
+
+export type ProjectKind = "lambda" | "fargate" | "app" | "unknown";
+
+export function detectProjectKind(projectRelativePath: string): ProjectKind {
+  if (!projectRelativePath) return "unknown";
+  const [segment] = projectRelativePath.split(path.sep);
+  switch (segment) {
+    case "funcs":
+      return "lambda";
+    case "servs":
+      return "fargate";
+    case "app":
+    case "apps":
+      return "app";
+    default:
+      return "unknown";
+  }
+}
+
+export function deriveDockerTagFromPath(projectRelativePath: string): string {
+  return projectRelativePath.replace(/\//g, "-").replace(/[^a-zA-Z0-9-_]/g, "");
 }
