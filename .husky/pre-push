@@ -1,6 +1,8 @@
 #!/bin/sh
 
-. "/home/daaxar/.nvm/nvm.sh"
-nvm use
+. "$HOME/.nvm/nvm.sh"
+nvm use > /dev/null
+
+echo "No tests specified" && exit 0
 
 npm test

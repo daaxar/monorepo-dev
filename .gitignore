@@ -74,10 +74,7 @@ web_modules/
 
 # dotenv environment variable files
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+.env.*
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -139,6 +136,8 @@ dist
 *.ignore
 .gitignore_*
 .gitpatch-*
+.prompts/*
+.github/instructions/*
 
 # SonarQube
 .scannerwork
@@ -148,3 +147,5 @@ dist
 cdk.out
 cdk.context.*
 !cdk.ts
+
+funcs/**/*.zip

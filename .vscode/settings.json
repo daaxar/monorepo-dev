@@ -27,9 +27,15 @@
     "**/cdk.*": true,
     "**/tsconfig.*": true,
     "**/jest.config.*": true,
+    
+    "funcs/[dD]ocker*": true,
+    "funcs/event.json": true,
+    "funcs/Makefile": true,
+    "funcs/invoke-local.sh": true,
+    
+    "**/.prompts": true,
+    "*.md": true,    
 
-    "*.md": true,
-
-    "tools": true
+    "tools": false
   }
 }

@@ -2,13 +2,26 @@
   "name": "@daaxar/logger",
   "description": "Logger library",
   "version": "1.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./Logger": {
+      "import": "./dist/application/Logger.mjs",
+      "require": "./dist/application/Logger.cjs",
+      "types": "./dist/application/Logger.d.ts"
+    }
+  },
   "scripts": {
     "build": "Dx build",
-    "build:types": "tsc src/index.ts --outDir dist --emitDeclarationOnly --declaration --moduleResolution node --resolveJsonModule --esModuleInterop",
-    "clean": "rimraf dist ",
-    "clean:all": "rimraf dist node_modules",
+    "clean": "rimraf dist/*",
+    "clean:all": "rimraf dist node_modules package-lock.json",
     "test": "echo \"WARN: no test specified\" && exit 0"
   },
   "keywords": [],

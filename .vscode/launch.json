@@ -5,33 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Adjuntar al contenedor Lambda",
       "type": "node",
       "request": "attach",
-      "address": "localhost",
-      "port": 9229,
-      "localRoot": "${workspaceFolder}/funcs/example/dist/",
-      "remoteRoot": "/var/task",
-      // "protocol": "inspector",
-      "restart": true,
-      "skipFiles": ["<node_internals>/**"],
-      "timeout": 300000
-    },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to Lambda",
+      "name": "Attach",
       "address": "localhost",
       "port": 9229,
       "restart": true,
       "timeout": 300000
-    },
-    {
-      "type": "node-terminal",
-      "name": "deploy:preview",
-      "request": "launch",
-      "command": "npm run deploy:preview",
-      "cwd": "${workspaceFolder}"
     }
   ]
 }

@@ -1,8 +1,8 @@
 import pino from "pino";
-import LoggerMethods from "../domain/LoggerMethods";
+import { LoggerMethods } from "../domain/LoggerMethods";
 
 const defaultFormatters = {
-  level(label) {
+  level(label: string) {
     return { level: label };
   },
 };
@@ -17,12 +17,15 @@ export default class PinoLoggerFactory {
     metadata: Record<string, unknown> = {},
     formatters: any = defaultFormatters,
   ): LoggerMethods {
-    const core = pino({
-      name,
-      level,
-      base: metadata,
-      formatters,
-    });
+    const core = pino(
+      {
+        name,
+        level,
+        base: metadata,
+        formatters,
+      },
+      pino.destination(1),
+    );
 
     return core as LoggerMethods;
   }

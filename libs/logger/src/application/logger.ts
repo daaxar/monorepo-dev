@@ -1,7 +1,10 @@
-import LoggerMethods from "../domain/LoggerMethods";
-import ExtendedLoggerMethods from "../domain/ExtendedLoggerMethods";
+import { LoggerMethods } from "@domain/LoggerMethods";
+import { ExtendedLoggerMethods } from "@domain/ExtendedLoggerMethods";
+import { TimeLoggerMethods } from "@domain/TimeLoggerMethods";
 
-export type ExtendedLoggerType = LoggerMethods & ExtendedLoggerMethods;
+export type ExtendedLoggerType = LoggerMethods &
+  ExtendedLoggerMethods &
+  TimeLoggerMethods;
 
 export default class Logger implements ExtendedLoggerType {
   constructor(private readonly logger: LoggerMethods) {}
@@ -37,7 +40,10 @@ export default class Logger implements ExtendedLoggerType {
       typeof level === "string" &&
       ["info", "debug", "warn", "error"].includes(level)
     ) {
-      this[level](message as string, context as Record<string, any>);
+      this[level as "info" | "debug" | "warn" | "error"](
+        message as string,
+        context as Record<string, any>,
+      );
     } else if (level instanceof Error && typeof message === "object") {
       this.error(level.message, {
         ...message,
@@ -45,11 +51,27 @@ export default class Logger implements ExtendedLoggerType {
         stack: level.stack,
       });
     } else if (level instanceof Error) {
-      this.error(level.message, { stack: level.stack });
+      this.error(level.message, { stack: level.stack, ...context });
     } else if (message && typeof message === "object") {
       this.info(JSON.stringify(level), { ...message, ...context });
     } else {
-      this.info(JSON.stringify(level));
+      this.info(JSON.stringify(level), context);
     }
+  }
+
+  private lastTime: undefined | [number, number];
+  elapsedTime(message?: string, context?: Record<string, any>): void {
+    if (this.lastTime === undefined) {
+      this.lastTime = process.hrtime();
+
+      return;
+    }
+    const timeEnd = process.hrtime(this.lastTime);
+    this.lastTime = process.hrtime();
+    const ms = timeEnd[0] * 1e3 + timeEnd[1] / 1e6;
+    this.info(`${message || "Time elapsed:"} ${ms.toFixed(3)}ms`, {
+      time: ms,
+      ...context,
+    });
   }
 }

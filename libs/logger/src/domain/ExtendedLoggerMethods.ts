@@ -1,4 +1,4 @@
-export default interface ExtendedLoggerMethods {
+export interface ExtendedLoggerMethods {
   log(
     level: "info" | "debug" | "warn" | "error",
     message: string,

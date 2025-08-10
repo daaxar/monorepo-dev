@@ -1,9 +1,9 @@
 import { hostname as getHostname } from "node:os";
-import Logger from "./application/logger";
-import LoggerMethods from "./domain/LoggerMethods";
-import PinoLoggerFactory from "./infrastructure/PinoLoggerFactory";
+import Logger from "@app/Logger";
+import PinoLoggerFactory from "@infrastructure/PinoLoggerFactory";
 
-let _defaultInstance;
+let _defaultInstance: Logger | null = null;
+
 let getDefaultInstance = (): Logger => {
   if (!_defaultInstance) {
     let name: string =
@@ -28,4 +28,3 @@ let getDefaultInstance = (): Logger => {
 };
 
 export default getDefaultInstance();
-export { getDefaultInstance, Logger, LoggerMethods };
