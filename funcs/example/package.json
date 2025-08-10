@@ -1,0 +1,28 @@
+{
+  "name": "@daaxar/recurring-csv",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "Dx build",
+    "build:types": "tsc src/index.ts --outDir dist --emitDeclarationOnly --declaration --moduleResolution node --resolveJsonModule --esModuleInterop",
+    "clean": "rimraf dist ",
+    "clean:all": "rimraf dist cdk.out node_modules",
+    "deploy:diff": "Dx deploy --diff",
+    "deploy:init": "Dx deploy --init",
+    "deploy:preview": "Dx deploy --preview",
+    "deploy": "Dx deploy",
+    "test": "echo \"WARN: no test specified\" && exit 0",
+    "start": "node --enable-source-maps ."
+  },
+  "keywords": [],
+  "author": "github.com/daaxar",
+  "license": "UNLICENSED",
+  "description": "",
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "csv-stringify": "^6.5.2",
+    "mongodb": "^6.13.0",
+    "nodemailer": "^6.10.0"
+  }
+}

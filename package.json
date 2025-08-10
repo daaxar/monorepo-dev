@@ -1,0 +1,53 @@
+{
+  "name": "@daaxar/monorepo-dev",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "tools/*",
+    "libs/*",
+    "funcs/*",
+    "servs/*",
+    "app/*"
+  ],
+  "scripts": {
+    "build": "npm run --silent build --workspaces --if-present",
+    "build:full": "npm run build && npm run build:types",
+    "build:types": "npm run build:types --workspaces --if-present",
+    "clean": "npm run --silent clean --workspaces --if-present",
+    "clean:all": "npm run --silent clean:all --workspaces --if-present && rm -rf node_modules package-lock.json",
+    "cli:build": "npm run --silent cli:build --workspaces --if-present",
+    "cli:clean": "npm run --silent cli:clean --workspaces --if-present",
+    "deploy": "npm run clean && npm run build:full && npm run --silent deploy --workspaces --if-present",
+    "deploy:diff": "npm run --silent deploy:diff --workspaces --if-present",
+    "deploy:init": "npm run --silent deploy:init --workspaces --if-present",
+    "deploy:preview": "npm run --silent deploy:preview --workspaces --if-present",
+    "dev": "npm run --silent dev --workspaces --if-present",
+    "start": "npm run --silent start --workspaces --if-present",
+    "test": "npm run --silent test --workspaces --if-present",
+    "nvm": "nvm use",
+    "prepare": "husky",
+    "Dx": "Dx"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
+    "@commitlint/types": "^19.5.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.5",
+    "husky": "^9.1.7",
+    "jest": "^29.7.0",
+    "lint-staged": "^15.4.3",
+    "prettier": "3.5.0",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.2.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "@daaxar/cli": "file:tools/cli"
+  },
+  "engines": {
+    "node": "22.11.0",
+    "npm": "10.9.0"
+  },
+  "author": "github.com/daaxar",
+  "license": "UNLICENSED"
+}

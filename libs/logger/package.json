@@ -1,0 +1,20 @@
+{
+  "name": "@daaxar/logger",
+  "description": "Logger library",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "Dx build",
+    "build:types": "tsc src/index.ts --outDir dist --emitDeclarationOnly --declaration --moduleResolution node --resolveJsonModule --esModuleInterop",
+    "clean": "rimraf dist ",
+    "clean:all": "rimraf dist node_modules",
+    "test": "echo \"WARN: no test specified\" && exit 0"
+  },
+  "keywords": [],
+  "author": "github.com/daaxar",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "pino": "^9.6.0"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "type": "lambda",
+  "name": "example",
+  "memorySize": 256,
+  "dependenciesLayers": [{ "name": "aws-sdk", "deps": ["aws-sdk"] }]
+}

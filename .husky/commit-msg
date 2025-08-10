@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. "/home/daaxar/.nvm/nvm.sh"
+nvm use
+
+commitlint --edit 
